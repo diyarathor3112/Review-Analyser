@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Results for {{product}}</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background: #f2f2f2; }
+    .best { background: #dff0d8; }
+  </style>
+</head>
+<body>
+  <h1>Results for "{{product}}"</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Source</th>
+        <th>Title</th>
+        <th>Price (INR / currency)</th>
+        <th>Rating</th>
+        <th>Number of reviews</th>
+        <th>URL</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in results['items'] %}
+      <tr class="{{ 'best' if r == results['best'] else '' }}">
+        <td>{{r.source}}</td>
+        <td>{{r.title}}</td>
+        <td>{{r.price}}</td>
+        <td>{{r.rating or 'N/A'}}</td>
+        <td>{{r.review_count or 'N/A'}}</td>
+        <td><a href="{{r.url}}" target="_blank">Open</a></td>
+        <td>{{'%.3f'|format(r.score)}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Recommended: </h2>
+  {% if results.best %}
+    <p><strong>{{ results.best.title }}</strong> — from {{ results.best.source }} — Price: {{ results.best.price }} — <a href="{{results.best.url}}" target="_blank">Buy</a></p>
+  {% else %}
+    <p>No best option found.</p>
+  {% endif %}
+
+  <p><a href="/">New search</a></p>
+</body>
+</html>
